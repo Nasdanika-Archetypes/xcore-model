@@ -2,6 +2,7 @@ package org.nasdanika.archetypes.models.xcore;
 
 import java.io.File;
 import java.util.Map;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
@@ -83,7 +84,7 @@ public class Generator {
 				.map(Input.mapMatch(this::handlersProject, "handlers/.project"))
 				.map(Input.mapMatch(this::handlersPomXml, "handlers/pom.xml"))
 				.map(Input.mapMatch(this::handlersSrcMainJavaModuleInfoJava, "handlers/src/main/java/module-info.java"))
-//				.map(Input.mapMatch(this::handlersMarkdownToEcoreArrayResourceContentsHandlerCapabilityFactory, "handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreArrayResourceContentsHandlerCapabilityFactory.java"))
+				.map(Input.mapMatch(this::handlersMarkdownToEcoreArrayResourceContentsHandlerCapabilityFactory, "handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreArrayResourceContentsHandlerCapabilityFactory.java"))
 //				.map(Input.mapMatch(this::handlersMarkdownToEcoreFactory, "handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreFactory.java"))
 //				.map(Input.mapMatch(this::handlersMarkdownToEcoreResourceContentsHandler, "handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreResourceContentsHandler.java"))
 //				.map(Input.mapMatch(this::handlersMarkdownToEcoreResourceContentsHandlerCapabilityFactory, "handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreResourceContentsHandlerCapabilityFactory.java"))
@@ -192,11 +193,20 @@ public class Generator {
 
 	//	handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreArrayResourceContentsHandlerCapabilityFactory.java
 	private StringInput handlersMarkdownToEcoreArrayResourceContentsHandlerCapabilityFactory(StringInput input) {
-		return input.mapLines(line -> {
-			return switch (line.getLineNumber()) {
-				default -> line;
-			};
-		});
+		UnaryOperator<URI> uriMapper = uri -> {
+			String uriStr = uri.toString();			
+			String newUriStr = uriStr.replace(
+					"org/nasdanika/models/markdown/handlers/MarkdownToEcoreArrayResourceContentsHandlerCapabilityFactory.java", 
+					"%s/handlers/%sToEcoreArrayResourceContentsHandlerCapabilityFactory.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
+			return URI.createURI(newUriStr);
+		};
+		return input
+				.mapURI(uriMapper)
+				.mapLines(line -> {
+					return switch (line.getLineNumber()) {
+						default -> line;
+					};
+				});
 
 	}
 
