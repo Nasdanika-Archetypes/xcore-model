@@ -6,8 +6,7 @@ module org.nasdanika.models.markdown.handlers {
 	
 	exports org.nasdanika.models.markdown.handlers;
 	opens org.nasdanika.models.markdown.handlers to org.nasdanika.common; // For transformer
-	
-	
+		
 	requires transitive org.nasdanika.models.markdown;
 	requires org.apache.commons.lang3;
 	requires org.eclipse.emf.ecore;

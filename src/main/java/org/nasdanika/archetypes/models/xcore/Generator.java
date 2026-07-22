@@ -4,10 +4,12 @@ import java.io.File;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.Input;
 import org.nasdanika.common.StreamInput;
 import org.nasdanika.common.StringInput;
+import org.nasdanika.common.StringInput.Line;
 import org.nasdanika.common.StringOutput;
 import org.nasdanika.common.Util;
 
@@ -48,6 +50,15 @@ public class Generator {
 	}
 	
 	/**
+	 * Java name of the model, e.g. "Markdown".
+	 * This implementation returns StringUtils.capitalize(getModelName()).
+	 * @return
+	 */
+	public String getModelJavaName() {
+		return StringUtils.capitalize(getModelName());
+	}
+	
+	/**
 	 * Maven groupId for the generated model, e.g. "org.nasdanika.models.markdown".
 	 * Also used for the module names, e.g. "org.nasdanika.models.markdown.handlers"
 	 * and package names, e.g. "org.nasdanika.models.markdown.handlers".
@@ -55,7 +66,7 @@ public class Generator {
 	 * Override for non-Nasdanika models.
 	 * @return
 	 */
-	private String getGroupId() {
+	public String getGroupId() {
 		return "org.nasdanika.models." + getModelName();
 	}
 
@@ -70,8 +81,8 @@ public class Generator {
 				.map(StringInput::ofStreamInput)
 				.map(Input.mapMatch(this::filterSiteYml, ".github/workflows/site.yml"))
 				.map(Input.mapMatch(this::handlersProject, "handlers/.project"))
-//				.map(Input.mapMatch(this::handlersPomXml, "handlers/pom.xml"))
-//				.map(Input.mapMatch(this::handlersSrcMainJavaModuleInfoJava, "handlers/src/main/java/module-info.java"))
+				.map(Input.mapMatch(this::handlersPomXml, "handlers/pom.xml"))
+				.map(Input.mapMatch(this::handlersSrcMainJavaModuleInfoJava, "handlers/src/main/java/module-info.java"))
 //				.map(Input.mapMatch(this::handlersMarkdownToEcoreArrayResourceContentsHandlerCapabilityFactory, "handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreArrayResourceContentsHandlerCapabilityFactory.java"))
 //				.map(Input.mapMatch(this::handlersMarkdownToEcoreFactory, "handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreFactory.java"))
 //				.map(Input.mapMatch(this::handlersMarkdownToEcoreResourceContentsHandler, "handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreResourceContentsHandler.java"))
@@ -130,21 +141,49 @@ public class Generator {
 		});
 
 	}
-
+		
 	//	handlers/pom.xml
 	private StringInput handlersPomXml(StringInput input) {
 		return input.mapLines(line -> {
 			return switch (line.getLineNumber()) {
+			case 3 -> replace(
+					line, 
+					"<groupId>org.nasdanika.models.markdown</groupId>",
+					"<groupId>%s</groupId>".formatted(getGroupId()));
 				default -> line;
 			};
 		});
 
 	}
 
+	protected Line replace(Line line, String from, String to) {
+		return line.mapLine(l -> l.replace(from, to));
+	}
+
 	//	handlers/src/main/java/module-info.java
 	private StringInput handlersSrcMainJavaModuleInfoJava(StringInput input) {
 		return input.mapLines(line -> {
 			return switch (line.getLineNumber()) {
+			case 2 -> replace(
+					line, 
+					"org.nasdanika.models.markdown.handlers.MarkdownToEcoreArrayResourceContentsHandlerCapabilityFactory",
+					"%s.handlers.%sToEcoreArrayResourceContentsHandlerCapabilityFactory".formatted(getGroupId(), getModelJavaName()));
+			case 3 -> replace(
+					line, 
+					"org.nasdanika.models.markdown.handlers.MarkdownToEcoreResourceContentsHandlerCapabilityFactory",
+					"%s.handlers.%sToEcoreResourceContentsHandlerCapabilityFactory".formatted(getGroupId(), getModelJavaName()));
+			case 5, 7, 8, 10 -> replace(
+					line, 
+					"org.nasdanika.models.markdown",
+					getGroupId());
+			case 15 -> replace(
+					line, 
+					"MarkdownToEcoreArrayResourceContentsHandlerCapabilityFactory",
+					"%sToEcoreArrayResourceContentsHandlerCapabilityFactory".formatted(getModelJavaName()));
+			case 16 -> replace(
+					line, 
+					"MarkdownToEcoreResourceContentsHandlerCapabilityFactory",
+					"%sToEcoreResourceContentsHandlerCapabilityFactory".formatted(getModelJavaName()));
 				default -> line;
 			};
 		});
