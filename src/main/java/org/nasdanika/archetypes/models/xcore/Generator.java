@@ -85,10 +85,10 @@ public class Generator {
 				.map(Input.mapMatch(this::handlersPomXml, "handlers/pom.xml"))
 				.map(Input.mapMatch(this::handlersSrcMainJavaModuleInfoJava, "handlers/src/main/java/module-info.java"))
 				.map(Input.mapMatch(this::handlersMarkdownToEcoreArrayResourceContentsHandlerCapabilityFactory, "handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreArrayResourceContentsHandlerCapabilityFactory.java"))
-//				.map(Input.mapMatch(this::handlersMarkdownToEcoreFactory, "handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreFactory.java"))
-//				.map(Input.mapMatch(this::handlersMarkdownToEcoreResourceContentsHandler, "handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreResourceContentsHandler.java"))
-//				.map(Input.mapMatch(this::handlersMarkdownToEcoreResourceContentsHandlerCapabilityFactory, "handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreResourceContentsHandlerCapabilityFactory.java"))
-//				.map(Input.mapMatch(this::handlersMarkdownContentsFilteringTests, "handlers/src/test/java/org/nasdanika/models/markdown/tests/MarkdownContentsFilteringTests.java"))
+				.map(Input.mapMatch(this::handlersMarkdownToEcoreFactory, "handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreFactory.java"))
+				.map(Input.mapMatch(this::handlersMarkdownToEcoreResourceContentsHandler, "handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreResourceContentsHandler.java"))
+				.map(Input.mapMatch(this::handlersMarkdownToEcoreResourceContentsHandlerCapabilityFactory, "handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreResourceContentsHandlerCapabilityFactory.java"))
+				.map(Input.mapMatch(this::handlersMarkdownContentsFilteringTests, "handlers/src/test/java/org/nasdanika/models/markdown/handlers/tests/MarkdownContentsFilteringTests.java"))
 //				.map(Input.mapMatch(this::modelProject, "model/.project"))
 //				.map(Input.mapMatch(this::modelDocReadmeMd, "model/doc/readme.md"))
 //				.map(Input.mapMatch(this::modelModelMarkdownXcore, "model/model/markdown.xcore"))
@@ -127,8 +127,7 @@ public class Generator {
 				case 49 -> line.mapLine(l -> l.replace("markdown.drawio", getModelName() + ".drawio"));
 				default -> line;
 			};
-		});
-		
+		});		
 	}
 	
 	private StringInput handlersProject(StringInput input) {
@@ -140,7 +139,6 @@ public class Generator {
 			default -> line;
 			};
 		});
-
 	}
 		
 	//	handlers/pom.xml
@@ -154,7 +152,6 @@ public class Generator {
 				default -> line;
 			};
 		});
-
 	}
 
 	protected Line replace(Line line, String from, String to) {
@@ -188,7 +185,6 @@ public class Generator {
 				default -> line;
 			};
 		});
-
 	}
 
 	//	handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreArrayResourceContentsHandlerCapabilityFactory.java
@@ -204,50 +200,125 @@ public class Generator {
 				.mapURI(uriMapper)
 				.mapLines(line -> {
 					return switch (line.getLineNumber()) {
-						default -> line;
+					case 1 -> replace(
+							line, 
+							"package org.nasdanika.models.markdown.handlers;",
+							"package %s.handlers;".formatted(getGroupId()));
+					case 16 -> replace(
+							line, 
+							"MarkdownToEcoreArrayResourceContentsHandlerCapabilityFactory",
+							"%sToEcoreArrayResourceContentsHandlerCapabilityFactory".formatted(getModelJavaName()));
+					case 57 -> replace(
+							line, 
+							"MarkdownToEcoreResourceContentsHandler",
+							"%sToEcoreResourceContentsHandler".formatted(getModelJavaName()));
+					default -> line;
 					};
 				});
-
 	}
 
 	//	handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreFactory.java
 	private StringInput handlersMarkdownToEcoreFactory(StringInput input) {
-		return input.mapLines(line -> {
-			return switch (line.getLineNumber()) {
-				default -> line;
-			};
+		UnaryOperator<URI> uriMapper = uri -> {
+			String uriStr = uri.toString();			
+			String newUriStr = uriStr.replace(
+					"org/nasdanika/models/markdown/handlers/MarkdownToEcoreFactory.java", 
+					"%s/handlers/%sToEcoreFactory.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
+			return URI.createURI(newUriStr);
+		};
+		return input
+				.mapURI(uriMapper)
+				.mapLines(line -> {
+					return switch (line.getLineNumber()) {
+					case 1 -> replace(
+							line, 
+							"package org.nasdanika.models.markdown.handlers;",
+							"package %s.handlers;".formatted(getGroupId()));
+					case 26, 54 -> replace(
+							line, 
+							"MarkdownToEcoreFactory",
+							"%sToEcoreFactory".formatted(getModelJavaName()));
+					default -> line;
+					};
 		});
-
 	}
 
 	//	handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreResourceContentsHandler.java
 	private StringInput handlersMarkdownToEcoreResourceContentsHandler(StringInput input) {
-		return input.mapLines(line -> {
-			return switch (line.getLineNumber()) {
-				default -> line;
-			};
+		UnaryOperator<URI> uriMapper = uri -> {
+			String uriStr = uri.toString();			
+			String newUriStr = uriStr.replace(
+					"org/nasdanika/models/markdown/handlers/MarkdownToEcoreResourceContentsHandler.java", 
+					"%s/handlers/%sToEcoreResourceContentsHandler.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
+			return URI.createURI(newUriStr);
+		};
+		return input
+				.mapURI(uriMapper)
+				.mapLines(line -> {
+					return switch (line.getLineNumber()) {
+					case 1 -> replace(
+							line, 
+							"package org.nasdanika.models.markdown.handlers;",
+							"package %s.handlers;".formatted(getGroupId()));
+					case 23, 31 -> replace(
+							line, 
+							"MarkdownToEcoreResourceContentsHandler",
+							"%sToEcoreResourceContentsHandler".formatted(getModelJavaName()));
+					default -> line;
+					};
 		});
-
 	}
 
 	//	handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreResourceContentsHandlerCapabilityFactory.java
 	private StringInput handlersMarkdownToEcoreResourceContentsHandlerCapabilityFactory(StringInput input) {
-		return input.mapLines(line -> {
-			return switch (line.getLineNumber()) {
-				default -> line;
-			};
+		UnaryOperator<URI> uriMapper = uri -> {
+			String uriStr = uri.toString();			
+			String newUriStr = uriStr.replace(
+					"org/nasdanika/models/markdown/handlers/MarkdownToEcoreResourceContentsHandlerCapabilityFactory.java", 
+					"%s/handlers/%sToEcoreResourceContentsHandlerCapabilityFactory.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
+			return URI.createURI(newUriStr);
+		};
+		return input
+				.mapURI(uriMapper)
+				.mapLines(line -> {
+					return switch (line.getLineNumber()) {
+					case 1 -> replace(
+							line, 
+							"package org.nasdanika.models.markdown.handlers;",
+							"package %s.handlers;".formatted(getGroupId()));
+					case 15 -> replace(
+							line, 
+							"MarkdownToEcoreResourceContentsHandlerCapabilityFactory",
+							"%sToEcoreResourceContentsHandlerCapabilityFactory".formatted(getModelJavaName()));
+					default -> line;
+					};
 		});
-
 	}
 
 	//	handlers/src/test/java/org/nasdanika/models/markdown/tests/MarkdownContentsFilteringTests.java
 	private StringInput handlersMarkdownContentsFilteringTests(StringInput input) {
-		return input.mapLines(line -> {
-			return switch (line.getLineNumber()) {
-				default -> line;
-			};
+		UnaryOperator<URI> uriMapper = uri -> {
+			String uriStr = uri.toString();			
+			String newUriStr = uriStr.replace(
+					"org/nasdanika/models/markdown/handlers/tests/MarkdownContentsFilteringTests.java", 
+					"%s/handlers/tests/%sContentsFilteringTests.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
+			return URI.createURI(newUriStr);
+		};
+		return input
+				.mapURI(uriMapper)
+				.mapLines(line -> {
+					return switch (line.getLineNumber()) {
+					case 1 -> replace(
+							line, 
+							"package org.nasdanika.models.markdown.handlers.tests;",
+							"package %s.handlers.tests;".formatted(getGroupId()));
+					case 18, 21 -> replace(
+							line, 
+							"Markdown",
+							getModelJavaName());
+					default -> line;
+					};
 		});
-
 	}
 
 	//	model/.project

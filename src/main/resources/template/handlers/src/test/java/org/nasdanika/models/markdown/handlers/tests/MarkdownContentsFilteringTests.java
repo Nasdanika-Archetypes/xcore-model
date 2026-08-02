@@ -1,4 +1,4 @@
-package org.nasdanika.models.markdown.tests;
+package org.nasdanika.models.markdown.handlers.tests;
 
 import java.io.File;
 
