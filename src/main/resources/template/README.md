@@ -1,3 +1,3 @@
-# Nasdanika Markdown Model
+# Markdown Model
 
 See https://markdown.models.nasdanika.org/

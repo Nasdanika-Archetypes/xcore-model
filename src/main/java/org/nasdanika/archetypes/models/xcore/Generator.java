@@ -70,6 +70,10 @@ public class Generator {
 	public String getGroupId() {
 		return "org.nasdanika.models." + getModelName();
 	}
+	
+	public String getNsURI() {
+		return "https://%s.models.nasdanika.org".formatted(getModelName());
+	}
 
 	public void generate(File outputDir) {
 		outputDir.mkdirs();
@@ -89,9 +93,9 @@ public class Generator {
 				.map(Input.mapMatch(this::handlersMarkdownToEcoreResourceContentsHandler, "handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreResourceContentsHandler.java"))
 				.map(Input.mapMatch(this::handlersMarkdownToEcoreResourceContentsHandlerCapabilityFactory, "handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreResourceContentsHandlerCapabilityFactory.java"))
 				.map(Input.mapMatch(this::handlersMarkdownContentsFilteringTests, "handlers/src/test/java/org/nasdanika/models/markdown/handlers/tests/MarkdownContentsFilteringTests.java"))
-//				.map(Input.mapMatch(this::modelProject, "model/.project"))
-//				.map(Input.mapMatch(this::modelDocReadmeMd, "model/doc/readme.md"))
-//				.map(Input.mapMatch(this::modelModelMarkdownXcore, "model/model/markdown.xcore"))
+				.map(Input.mapMatch(this::modelProject, "model/.project"))
+				.map(Input.mapMatch(this::modelDocReadmeMd, "model/doc/readme.md"))
+				.map(Input.mapMatch(this::modelModelMarkdownXcore, "model/src/main/resources/org/nasdanika/models/markdown/markdown.xcore"))
 //				.map(Input.mapMatch(this::modelPageTemplateYml, "model/page-template.yml"))
 //				.map(Input.mapMatch(this::modelPomXml, "model/pom.xml"))
 //				.map(Input.mapMatch(this::modelRootActionYml, "model/root-action.yml"))
@@ -325,30 +329,50 @@ public class Generator {
 	private StringInput modelProject(StringInput input) {
 		return input.mapLines(line -> {
 			return switch (line.getLineNumber()) {
-				default -> line;
+			case 3 -> line.mapLine(l -> l.replace(
+					"<name>org.nasdanika.models.markdown</name>", 
+					"<name>%s</name>".formatted(getGroupId())));
+			default -> line;
 			};
 		});
-
 	}
 
 	//	model/doc/readme.md
 	private StringInput modelDocReadmeMd(StringInput input) {
 		return input.mapLines(line -> {
 			return switch (line.getLineNumber()) {
-				default -> line;
+			case 3 -> line.mapLine(l -> l.replace(
+					"markdown", 
+					getModelName()));
+			default -> line;
 			};
 		});
-
 	}
 
 	//	model/model/markdown.xcore
 	private StringInput modelModelMarkdownXcore(StringInput input) {
-		return input.mapLines(line -> {
-			return switch (line.getLineNumber()) {
-				default -> line;
-			};
+		UnaryOperator<URI> uriMapper = uri -> {
+			String uriStr = uri.toString();			
+			String newUriStr = uriStr.replace(
+					"org/nasdanika/models/markdown/markdown.xcore", 
+					"%s/%s.xcore".formatted(getGroupId().replace('.', '/'), getModelName()));
+			return URI.createURI(newUriStr);
+		};
+		return input
+				.mapURI(uriMapper)
+				.mapLines(line -> {
+					return switch (line.getLineNumber()) {
+					case 1 -> replace(
+							line, 
+							"@Ecore(nsURI=\"https://markdown.models.nasdanika.org\", nsPrefix=\"org.nasdanika.models.markdown\")",
+							"@Ecore(nsURI=\"%s\", nsPrefix=\"%s\")".formatted(getNsURI(), getGroupId()));
+					case 10 -> replace(
+							line, 
+							"org.nasdanika.models.markdown",
+							getGroupId());
+					default -> line;
+					};
 		});
-
 	}
 
 	//	model/page-template.yml
