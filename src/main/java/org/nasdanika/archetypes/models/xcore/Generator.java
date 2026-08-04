@@ -97,14 +97,14 @@ public class Generator {
 				.map(Input.mapMatch(this::modelDocReadmeMd, "model/doc/readme.md"))
 				.map(Input.mapMatch(this::modelModelMarkdownXcore, "model/src/main/resources/org/nasdanika/models/markdown/markdown.xcore"))
 //				.map(Input.mapMatch(this::modelPageTemplateYml, "model/page-template.yml"))
-//				.map(Input.mapMatch(this::modelPomXml, "model/pom.xml"))
-//				.map(Input.mapMatch(this::modelRootActionYml, "model/root-action.yml"))
-//				.map(Input.mapMatch(this::modelSrcMainJavaModuleInfoJava, "model/src/main/java/module-info.java"))
-//				.map(Input.mapMatch(this::modelMarkdownArrayResourceContentsHandlerCapabilityFactory, "model/src/main/java/org/nasdanika/models/markdown/capability/MarkdownArrayResourceContentsHandlerCapabilityFactory.java"))
-//				.map(Input.mapMatch(this::modelMarkdownEPackageResourceSetCapabilityFactory, "model/src/main/java/org/nasdanika/models/markdown/capability/MarkdownEPackageResourceSetCapabilityFactory.java"))
-//				.map(Input.mapMatch(this::modelMarkdownResourceContentsHandler, "model/src/main/java/org/nasdanika/models/markdown/capability/MarkdownResourceContentsHandler.java"))
-//				.map(Input.mapMatch(this::modelMarkdownResourceContentsHandlerCapabilityFactory, "model/src/main/java/org/nasdanika/models/markdown/capability/MarkdownResourceContentsHandlerCapabilityFactory.java"))
-//				.map(Input.mapMatch(this::modelMarkdownResourceFactoryCapabilityFactory, "model/src/main/java/org/nasdanika/models/markdown/capability/MarkdownResourceFactoryCapabilityFactory.java"))
+				.map(Input.mapMatch(this::modelPomXml, "model/pom.xml"))
+				.map(Input.mapMatch(this::modelRootActionYml, "model/root-action.yml"))
+				.map(Input.mapMatch(this::modelSrcMainJavaModuleInfoJava, "model/src/main/java/module-info.java"))
+				.map(Input.mapMatch(this::modelMarkdownArrayResourceContentsHandlerCapabilityFactory, "model/src/main/java/org/nasdanika/models/markdown/capability/MarkdownArrayResourceContentsHandlerCapabilityFactory.java"))
+				.map(Input.mapMatch(this::modelMarkdownEPackageResourceSetCapabilityFactory, "model/src/main/java/org/nasdanika/models/markdown/capability/MarkdownEPackageResourceSetCapabilityFactory.java"))
+				.map(Input.mapMatch(this::modelMarkdownResourceContentsHandler, "model/src/main/java/org/nasdanika/models/markdown/capability/MarkdownResourceContentsHandler.java"))
+				.map(Input.mapMatch(this::modelMarkdownResourceContentsHandlerCapabilityFactory, "model/src/main/java/org/nasdanika/models/markdown/capability/MarkdownResourceContentsHandlerCapabilityFactory.java"))
+				.map(Input.mapMatch(this::modelMarkdownResourceFactoryCapabilityFactory, "model/src/main/java/org/nasdanika/models/markdown/capability/MarkdownResourceFactoryCapabilityFactory.java"))
 //				.map(Input.mapMatch(this::modelIcon, "model/src/main/java/org/nasdanika/models/markdown/Icon.java"))
 //				.map(Input.mapMatch(this::modelMarkdownVisitor, "model/src/main/java/org/nasdanika/models/markdown/loader/MarkdownVisitor.java"))
 //				.map(Input.mapMatch(this::modelMarkdownTests, "model/src/test/java/org/nasdanika/models/markdown/tests/MarkdownTests.java"))
@@ -117,7 +117,7 @@ public class Generator {
 	}
 	
 	//	.github/workflows/site.yml
-	private StringInput filterSiteYml(StringInput input) {
+	protected StringInput filterSiteYml(StringInput input) {
 		return input.mapLines(line -> {
 			return switch (line.getLineNumber()) {		
 				case 27 -> line.mapLine(l -> l.replace("Set up JDK 21", "Set up JDK %s".formatted(getJavaVersion())));
@@ -134,7 +134,7 @@ public class Generator {
 		});		
 	}
 	
-	private StringInput handlersProject(StringInput input) {
+	protected StringInput handlersProject(StringInput input) {
 		return input.mapLines(line -> {
 			return switch (line.getLineNumber()) {
 			case 3 -> line.mapLine(l -> l.replace(
@@ -146,7 +146,7 @@ public class Generator {
 	}
 		
 	//	handlers/pom.xml
-	private StringInput handlersPomXml(StringInput input) {
+	protected StringInput handlersPomXml(StringInput input) {
 		return input.mapLines(line -> {
 			return switch (line.getLineNumber()) {
 			case 3 -> replace(
@@ -163,7 +163,7 @@ public class Generator {
 	}
 
 	//	handlers/src/main/java/module-info.java
-	private StringInput handlersSrcMainJavaModuleInfoJava(StringInput input) {
+	protected StringInput handlersSrcMainJavaModuleInfoJava(StringInput input) {
 		return input.mapLines(line -> {
 			return switch (line.getLineNumber()) {
 			case 2 -> replace(
@@ -186,13 +186,13 @@ public class Generator {
 					line, 
 					"MarkdownToEcoreResourceContentsHandlerCapabilityFactory",
 					"%sToEcoreResourceContentsHandlerCapabilityFactory".formatted(getModelJavaName()));
-				default -> line;
+			default -> line;
 			};
 		});
 	}
 
 	//	handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreArrayResourceContentsHandlerCapabilityFactory.java
-	private StringInput handlersMarkdownToEcoreArrayResourceContentsHandlerCapabilityFactory(StringInput input) {
+	protected StringInput handlersMarkdownToEcoreArrayResourceContentsHandlerCapabilityFactory(StringInput input) {
 		UnaryOperator<URI> uriMapper = uri -> {
 			String uriStr = uri.toString();			
 			String newUriStr = uriStr.replace(
@@ -222,7 +222,7 @@ public class Generator {
 	}
 
 	//	handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreFactory.java
-	private StringInput handlersMarkdownToEcoreFactory(StringInput input) {
+	protected StringInput handlersMarkdownToEcoreFactory(StringInput input) {
 		UnaryOperator<URI> uriMapper = uri -> {
 			String uriStr = uri.toString();			
 			String newUriStr = uriStr.replace(
@@ -248,7 +248,7 @@ public class Generator {
 	}
 
 	//	handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreResourceContentsHandler.java
-	private StringInput handlersMarkdownToEcoreResourceContentsHandler(StringInput input) {
+	protected StringInput handlersMarkdownToEcoreResourceContentsHandler(StringInput input) {
 		UnaryOperator<URI> uriMapper = uri -> {
 			String uriStr = uri.toString();			
 			String newUriStr = uriStr.replace(
@@ -274,7 +274,7 @@ public class Generator {
 	}
 
 	//	handlers/src/main/java/org/nasdanika/models/markdown/handlers/MarkdownToEcoreResourceContentsHandlerCapabilityFactory.java
-	private StringInput handlersMarkdownToEcoreResourceContentsHandlerCapabilityFactory(StringInput input) {
+	protected StringInput handlersMarkdownToEcoreResourceContentsHandlerCapabilityFactory(StringInput input) {
 		UnaryOperator<URI> uriMapper = uri -> {
 			String uriStr = uri.toString();			
 			String newUriStr = uriStr.replace(
@@ -300,7 +300,7 @@ public class Generator {
 	}
 
 	//	handlers/src/test/java/org/nasdanika/models/markdown/tests/MarkdownContentsFilteringTests.java
-	private StringInput handlersMarkdownContentsFilteringTests(StringInput input) {
+	protected StringInput handlersMarkdownContentsFilteringTests(StringInput input) {
 		UnaryOperator<URI> uriMapper = uri -> {
 			String uriStr = uri.toString();			
 			String newUriStr = uriStr.replace(
@@ -326,7 +326,7 @@ public class Generator {
 	}
 
 	//	model/.project
-	private StringInput modelProject(StringInput input) {
+	protected StringInput modelProject(StringInput input) {
 		return input.mapLines(line -> {
 			return switch (line.getLineNumber()) {
 			case 3 -> line.mapLine(l -> l.replace(
@@ -338,7 +338,7 @@ public class Generator {
 	}
 
 	//	model/doc/readme.md
-	private StringInput modelDocReadmeMd(StringInput input) {
+	protected StringInput modelDocReadmeMd(StringInput input) {
 		return input.mapLines(line -> {
 			return switch (line.getLineNumber()) {
 			case 3 -> line.mapLine(l -> l.replace(
@@ -350,7 +350,7 @@ public class Generator {
 	}
 
 	//	model/model/markdown.xcore
-	private StringInput modelModelMarkdownXcore(StringInput input) {
+	protected StringInput modelModelMarkdownXcore(StringInput input) {
 		UnaryOperator<URI> uriMapper = uri -> {
 			String uriStr = uri.toString();			
 			String newUriStr = uriStr.replace(
@@ -376,93 +376,225 @@ public class Generator {
 	}
 
 	//	model/page-template.yml
-	private StringInput modelPageTemplateYml(StringInput input) {
-		return input.mapLines(line -> {
-			return switch (line.getLineNumber()) {
-				default -> line;
-			};
-		});
-
-	}
+//	protected StringInput modelPageTemplateYml(StringInput input) {
+//		return input.mapLines(line -> {
+//			return switch (line.getLineNumber()) {
+//				default -> line;
+//			};
+//		});
+//	}
 
 	//	model/pom.xml
-	private StringInput modelPomXml(StringInput input) {
+	protected StringInput modelPomXml(StringInput input) {
 		return input.mapLines(line -> {
 			return switch (line.getLineNumber()) {
+			case 3 -> replace(
+					line, 
+					"<groupId>org.nasdanika.models.markdown</groupId>",
+					"<groupId>%s</groupId>".formatted(getGroupId()));
+			case 13 -> replace(
+					line, 
+					"Markdown",
+					getModelJavaName());
 				default -> line;
 			};
 		});
-
 	}
 
 	//	model/root-action.yml
-	private StringInput modelRootActionYml(StringInput input) {
+	protected StringInput modelRootActionYml(StringInput input) {
 		return input.mapLines(line -> {
 			return switch (line.getLineNumber()) {
+			case 6 -> replace(
+					line, 
+					"markdown",
+					getModelName());
+			case 17 -> replace(
+					line, 
+					"https://github.com/Nasdanika-Models/markdown",
+					getSoureUrl());
 				default -> line;
 			};
 		});
+	}
 
+	public String getSoureUrl() {
+		return "https://github.com/Nasdanika-Models/" + getModelName();
 	}
 
 	//	model/src/main/java/module-info.java
-	private StringInput modelSrcMainJavaModuleInfoJava(StringInput input) {
+	protected StringInput modelSrcMainJavaModuleInfoJava(StringInput input) {
 		return input.mapLines(line -> {
 			return switch (line.getLineNumber()) {
-				default -> line;
+			case 2, 3, 4, 5 -> replace(
+					line, 
+					"org.nasdanika.models.markdown.capability.Markdown",
+					"%s.%s".formatted(getGroupId(), getModelJavaName()));
+			case 9, 10, 11, 12 -> replace(
+					line, 
+					"org.nasdanika.models.markdown",
+					getGroupId());
+			case 33, 34, 35, 36 -> replace(
+					line, 
+					"Markdown",
+					getModelJavaName());
+			default -> line;
 			};
 		});
-
 	}
 
 	//	model/src/main/java/org/nasdanika/models/markdown/capability/MarkdownArrayResourceContentsHandlerCapabilityFactory.java
-	private StringInput modelMarkdownArrayResourceContentsHandlerCapabilityFactory(StringInput input) {
-		return input.mapLines(line -> {
-			return switch (line.getLineNumber()) {
-				default -> line;
-			};
-		});
-
+	protected StringInput modelMarkdownArrayResourceContentsHandlerCapabilityFactory(StringInput input) {
+		UnaryOperator<URI> uriMapper = uri -> {
+			String uriStr = uri.toString();			
+			String newUriStr = uriStr.replace(
+					"org/nasdanika/models/markdown/capability/MarkdownArrayResourceContentsHandlerCapabilityFactory.java", 
+					"%s/capability/%sMarkdownArrayResourceContentsHandlerCapabilityFactory.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
+			return URI.createURI(newUriStr);
+		};
+		return input
+				.mapURI(uriMapper)
+				.mapLines(line -> {
+					return switch (line.getLineNumber()) {
+					case 1 -> replace(
+							line, 
+							"package org.nasdanika.models.markdown.capability;",
+							"package %s.capability;".formatted(getGroupId()));
+					case 14 -> replace(
+							line, 
+							"MarkdownArrayResourceContentsHandlerCapabilityFactory",
+							"%sArrayResourceContentsHandlerCapabilityFactory".formatted(getModelJavaName()));
+					case 36 -> replace(
+							line, 
+							"MarkdownResourceContentsHandler",
+							"%sResourceContentsHandler".formatted(getModelJavaName()));
+					default -> line;
+					};
+				});
 	}
 
 	//	model/src/main/java/org/nasdanika/models/markdown/capability/MarkdownEPackageResourceSetCapabilityFactory.java
-	private StringInput modelMarkdownEPackageResourceSetCapabilityFactory(StringInput input) {
-		return input.mapLines(line -> {
-			return switch (line.getLineNumber()) {
-				default -> line;
-			};
+	protected StringInput modelMarkdownEPackageResourceSetCapabilityFactory(StringInput input) {
+		UnaryOperator<URI> uriMapper = uri -> {
+			String uriStr = uri.toString();			
+			String newUriStr = uriStr.replace(
+					"org/nasdanika/models/markdown/MarkdownEPackageResourceSetCapabilityFactory.java", 
+					"%s/%sEPackageResourceSetCapabilityFactory.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
+			return URI.createURI(newUriStr);
+		};
+		return input
+				.mapURI(uriMapper)				
+				.mapLines(line -> {
+					return switch (line.getLineNumber()) {
+					case 1 -> replace(
+							line, 
+							"package org.nasdanika.models.markdown.capability;",
+							"package %s.capability;".formatted(getGroupId()));
+					case 6 -> replace(
+							line, 
+							"import org.nasdanika.models.markdown.MarkdownPackage;",
+							"import %s.%sPackage;".formatted(getGroupId(), getModelJavaName()));
+					case 8, 12 -> replace(
+							line, 
+							"Markdown",
+							getModelJavaName());
+					case 17 -> replace(
+							line, 
+							"https://markdown.models.nasdanika.org",
+							getNsURI());
+					default -> line;
+					};
 		});
-
 	}
 
 	//	model/src/main/java/org/nasdanika/models/markdown/capability/MarkdownResourceContentsHandler.java
-	private StringInput modelMarkdownResourceContentsHandler(StringInput input) {
-		return input.mapLines(line -> {
-			return switch (line.getLineNumber()) {
-				default -> line;
-			};
+	protected StringInput modelMarkdownResourceContentsHandler(StringInput input) {
+		UnaryOperator<URI> uriMapper = uri -> {
+			String uriStr = uri.toString();			
+			String newUriStr = uriStr.replace(
+					"org/nasdanika/models/markdown/MarkdownResourceContentsHandler.java", 
+					"%s/%sResourceContentsHandler.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
+			return URI.createURI(newUriStr);
+		};
+		return input
+				.mapURI(uriMapper)
+				.mapLines(line -> {
+					return switch (line.getLineNumber()) {
+					case 1 -> replace(
+							line, 
+							"package org.nasdanika.models.markdown.capability;",
+							"package %s.capability;".formatted(getGroupId()));
+					case 15 -> replace(
+							line, 
+							"import org.nasdanika.models.markdown.MarkdownPackage;",
+							"import %s.%sPackage;".formatted(getGroupId(), getModelJavaName()));
+					case 23 -> replace(
+							line, 
+							"Markdown",
+							getModelJavaName());
+					default -> line;
+					};
 		});
-
 	}
 
 	//	model/src/main/java/org/nasdanika/models/markdown/capability/MarkdownResourceContentsHandlerCapabilityFactory.java
-	private StringInput modelMarkdownResourceContentsHandlerCapabilityFactory(StringInput input) {
-		return input.mapLines(line -> {
-			return switch (line.getLineNumber()) {
-				default -> line;
-			};
+	protected StringInput modelMarkdownResourceContentsHandlerCapabilityFactory(StringInput input) {
+		UnaryOperator<URI> uriMapper = uri -> {
+			String uriStr = uri.toString();			
+			String newUriStr = uriStr.replace(
+					"org/nasdanika/models/markdown/MarkdownResourceContentsHandlerCapabilityFactory.java", 
+					"%s/%sResourceContentsHandlerCapabilityFactory.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
+			return URI.createURI(newUriStr);
+		};
+		return input
+				.mapURI(uriMapper)				
+				.mapLines(line -> {
+					return switch (line.getLineNumber()) {
+					case 1 -> replace(
+							line, 
+							"package org.nasdanika.models.markdown.capability;",
+							"package %s.capability;".formatted(getGroupId()));
+					case 14, 36 -> replace(
+							line, 
+							"Markdown",
+							getModelJavaName());
+					default -> line;
+					};
 		});
-
 	}
 
 	//	model/src/main/java/org/nasdanika/models/markdown/capability/MarkdownResourceFactoryCapabilityFactory.java
-	private StringInput modelMarkdownResourceFactoryCapabilityFactory(StringInput input) {
-		return input.mapLines(line -> {
-			return switch (line.getLineNumber()) {
-				default -> line;
-			};
+	protected StringInput modelMarkdownResourceFactoryCapabilityFactory(StringInput input) {
+		UnaryOperator<URI> uriMapper = uri -> {
+			String uriStr = uri.toString();			
+			String newUriStr = uriStr.replace(
+					"org/nasdanika/models/markdown/MarkdownResourceFactoryCapabilityFactory.java", 
+					"%s/%sResourceFactoryCapabilityFactory.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
+			return URI.createURI(newUriStr);
+		};
+		return input
+				.mapURI(uriMapper)				
+				.mapLines(line -> {
+					return switch (line.getLineNumber()) {
+					case 1 -> replace(
+							line, 
+							"package org.nasdanika.models.markdown.capability;",
+							"package %s.capability;".formatted(getGroupId()));
+					case 9 -> replace(
+							line, 
+							"Markdown",
+							getModelJavaName());
+					case 22 -> replace(
+							line, 
+							"md",
+							getExtension());
+					default -> line;
+					};
 		});
+	}
 
+	public String getExtension() {
+		return getModelName();
 	}
 
 	//	model/src/main/java/org/nasdanika/models/markdown/Icon.java
