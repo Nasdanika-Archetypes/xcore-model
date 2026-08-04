@@ -41,7 +41,7 @@ jobs:
           chmod u+x nsd          
           pwd
           ls ..
-          ./nsd xcore ../model/model/markdown.xcore doc --diagram=markdown.drawio --doc-stubs --doc-dir=../model/doc save ../model/markdown.xmi
+          ./nsd xcore ../model/src/main/resources/org/nasdanika/models/markdown/markdown.xcore doc --diagram=markdown.drawio --doc-stubs --doc-dir=../model/doc save ../model/markdown.xmi
       - name: Generate Ecore site
         working-directory: nsd-cli
         run: |

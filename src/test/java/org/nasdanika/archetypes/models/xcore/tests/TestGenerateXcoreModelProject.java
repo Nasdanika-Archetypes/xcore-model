@@ -15,6 +15,15 @@ public class TestGenerateXcoreModelProject {
 		generator.setJavaVersion("23");
 		
 		generator.generate(new File("target/generated-model/xcore-model"));
+	}
+	
+	@Test
+	public void testGenerateA2UIXcoreModelProject() throws Exception {
+		Generator generator = new Generator();
+		generator.setModelName("a2ui");
+		generator.setVersion("2026.8.0");
+		generator.generate(new File("target/generated-model/a2ui"));
 	}	
+	
 		
 }

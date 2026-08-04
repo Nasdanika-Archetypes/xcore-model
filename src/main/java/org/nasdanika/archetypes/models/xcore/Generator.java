@@ -124,10 +124,12 @@ public class Generator {
 				case 30 -> line.mapLine(l -> l.replace("java-version: '21'", "java-version: '%s'".formatted(getJavaVersion())));
 				case 33 -> line.mapLine(l -> l.replace("2026.2.0", getCliVersion()));
 				case 44 -> line.mapLine(l -> l.replace(
-						"./nsd xcore ../model/model/markdown.xcore doc --diagram=markdown.drawio --doc-stubs --doc-dir=../model/doc save ../model/markdown.xmi", 
+						"./nsd xcore ../model/src/main/resources/org/nasdanika/models/markdown/markdown.xcore doc --diagram=markdown.drawio --doc-stubs --doc-dir=../model/doc save ../model/markdown.xmi", 
 						Util.interpolate(
-								"./nsd xcore ../model/model/${modelName}.xcore doc --diagram=${modelName}.drawio --doc-stubs --doc-dir=../model/doc save ../model/${modelName}.xmi",
-								Map.of("modelName", getModelName())::get)));
+								"./nsd xcore ../model/src/main/resources/${groupPath}/${modelName}.xcore doc --diagram=${modelName}.drawio --doc-stubs --doc-dir=../model/doc save ../model/${modelName}.xmi",
+								Map.of(
+										"modelName", getModelName(),
+										"groupPath", getGroupId().replace('.', '/'))::get)));
 				case 49 -> line.mapLine(l -> l.replace("markdown.drawio", getModelName() + ".drawio"));
 				default -> line;
 			};
@@ -161,9 +163,15 @@ public class Generator {
 			};
 		});
 	}
+	
+	private String version = "0.0.1-SNAPSHOT";
 
 	public String getVersion() {
-		return "0.0.1-SNAPSHOT";		
+		return version;		
+	}
+	
+	public void setVersion(String version) {
+		this.version = version;
 	}
 
 	protected Line replace(Line line, String from, String to) {
@@ -461,7 +469,7 @@ public class Generator {
 			String uriStr = uri.toString();			
 			String newUriStr = uriStr.replace(
 					"org/nasdanika/models/markdown/capability/MarkdownArrayResourceContentsHandlerCapabilityFactory.java", 
-					"%s/capability/%sMarkdownArrayResourceContentsHandlerCapabilityFactory.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
+					"%s/capability/%sArrayResourceContentsHandlerCapabilityFactory.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
 			return URI.createURI(newUriStr);
 		};
 		return input
@@ -490,7 +498,7 @@ public class Generator {
 		UnaryOperator<URI> uriMapper = uri -> {
 			String uriStr = uri.toString();			
 			String newUriStr = uriStr.replace(
-					"org/nasdanika/models/markdown/MarkdownEPackageResourceSetCapabilityFactory.java", 
+					"org/nasdanika/models/markdown/capability/MarkdownEPackageResourceSetCapabilityFactory.java", 
 					"%s/%sEPackageResourceSetCapabilityFactory.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
 			return URI.createURI(newUriStr);
 		};
@@ -524,7 +532,7 @@ public class Generator {
 		UnaryOperator<URI> uriMapper = uri -> {
 			String uriStr = uri.toString();			
 			String newUriStr = uriStr.replace(
-					"org/nasdanika/models/markdown/MarkdownResourceContentsHandler.java", 
+					"org/nasdanika/models/markdown/capability/MarkdownResourceContentsHandler.java", 
 					"%s/%sResourceContentsHandler.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
 			return URI.createURI(newUriStr);
 		};
@@ -554,7 +562,7 @@ public class Generator {
 		UnaryOperator<URI> uriMapper = uri -> {
 			String uriStr = uri.toString();			
 			String newUriStr = uriStr.replace(
-					"org/nasdanika/models/markdown/MarkdownResourceContentsHandlerCapabilityFactory.java", 
+					"org/nasdanika/models/markdown/capability/MarkdownResourceContentsHandlerCapabilityFactory.java", 
 					"%s/%sResourceContentsHandlerCapabilityFactory.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
 			return URI.createURI(newUriStr);
 		};
@@ -580,7 +588,7 @@ public class Generator {
 		UnaryOperator<URI> uriMapper = uri -> {
 			String uriStr = uri.toString();			
 			String newUriStr = uriStr.replace(
-					"org/nasdanika/models/markdown/MarkdownResourceFactoryCapabilityFactory.java", 
+					"org/nasdanika/models/markdown/capability/MarkdownResourceFactoryCapabilityFactory.java", 
 					"%s/%sResourceFactoryCapabilityFactory.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
 			return URI.createURI(newUriStr);
 		};
@@ -614,8 +622,8 @@ public class Generator {
 		UnaryOperator<URI> uriMapper = uri -> {
 			String uriStr = uri.toString();			
 			String newUriStr = uriStr.replace(
-					"org/nasdanika/models/markdown/MarkdownResourceFactoryCapabilityFactory.java", 
-					"%s/%sResourceFactoryCapabilityFactory.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
+					"org/nasdanika/models/markdown", 
+					getGroupId());
 			return URI.createURI(newUriStr);
 		};
 		return input
