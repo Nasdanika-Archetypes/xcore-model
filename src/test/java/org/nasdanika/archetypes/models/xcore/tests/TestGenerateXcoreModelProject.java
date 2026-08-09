@@ -25,5 +25,13 @@ public class TestGenerateXcoreModelProject {
 		generator.generate(new File("target/generated-model/a2ui"));
 	}	
 	
+	@Test
+	public void testGenerateRoleXcoreModelProject() throws Exception {
+		Generator generator = new Generator();
+		generator.setModelName("role");
+		generator.setVersion("2026.8.0");
+		generator.generate(new File("target/generated-model/role"));
+	}	
+	
 		
 }

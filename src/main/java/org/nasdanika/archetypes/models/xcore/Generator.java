@@ -449,6 +449,10 @@ public class Generator {
 			case 2, 3, 4, 5 -> replace(
 					line, 
 					"org.nasdanika.models.markdown.capability.Markdown",
+					"%s.capability.%s".formatted(getGroupId(), getModelJavaName()));
+			case 7 -> replace(
+					line, 
+					"org.nasdanika.models.markdown",
 					"%s.%s".formatted(getGroupId(), getModelJavaName()));
 			case 9, 10, 11, 12 -> replace(
 					line, 
@@ -499,7 +503,7 @@ public class Generator {
 			String uriStr = uri.toString();			
 			String newUriStr = uriStr.replace(
 					"org/nasdanika/models/markdown/capability/MarkdownEPackageResourceSetCapabilityFactory.java", 
-					"%s/%sEPackageResourceSetCapabilityFactory.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
+					"%s/capability/%sEPackageResourceSetCapabilityFactory.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
 			return URI.createURI(newUriStr);
 		};
 		return input
@@ -533,7 +537,7 @@ public class Generator {
 			String uriStr = uri.toString();			
 			String newUriStr = uriStr.replace(
 					"org/nasdanika/models/markdown/capability/MarkdownResourceContentsHandler.java", 
-					"%s/%sResourceContentsHandler.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
+					"%s/capability/%sResourceContentsHandler.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
 			return URI.createURI(newUriStr);
 		};
 		return input
@@ -563,7 +567,7 @@ public class Generator {
 			String uriStr = uri.toString();			
 			String newUriStr = uriStr.replace(
 					"org/nasdanika/models/markdown/capability/MarkdownResourceContentsHandlerCapabilityFactory.java", 
-					"%s/%sResourceContentsHandlerCapabilityFactory.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
+					"%s/capability/%sResourceContentsHandlerCapabilityFactory.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
 			return URI.createURI(newUriStr);
 		};
 		return input
@@ -589,7 +593,7 @@ public class Generator {
 			String uriStr = uri.toString();			
 			String newUriStr = uriStr.replace(
 					"org/nasdanika/models/markdown/capability/MarkdownResourceFactoryCapabilityFactory.java", 
-					"%s/%sResourceFactoryCapabilityFactory.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
+					"%s/capability/%sResourceFactoryCapabilityFactory.java".formatted(getGroupId().replace('.', '/'), getModelJavaName()));
 			return URI.createURI(newUriStr);
 		};
 		return input
@@ -623,7 +627,7 @@ public class Generator {
 			String uriStr = uri.toString();			
 			String newUriStr = uriStr.replace(
 					"org/nasdanika/models/markdown", 
-					getGroupId());
+					getGroupId().replace('.', '/'));
 			return URI.createURI(newUriStr);
 		};
 		return input
