@@ -30,7 +30,7 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
       - name: Download Nasdanika CLI
-        run: wget https://github.com/Nasdanika/cli/releases/download/maven-2026.2.0/nsd-cli.zip
+        run: wget https://github.com/Nasdanika/cli/releases/download/maven-2026.6.0/nsd-cli.zip
       - name: Unzip Nasdanika CLI
         run: unzip nsd-cli.zip
       - name: Setup Graphviz
@@ -47,6 +47,7 @@ jobs:
         run: |
           ./nsd model ../model/root-action.yml labels site -r=-1 -F ../model/page-template.yml ../docs
           cp markdown.drawio ../docs
+          cp ../model/src/main/resources/org/nasdanika/models/markdown/markdown.xcore ../docs
           cp -R ../images ../docs
           zip -r ../docs/doc-stubs.zip ../model/doc
           ls ../docs

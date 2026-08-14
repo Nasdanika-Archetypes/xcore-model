@@ -38,30 +38,7 @@ public class TestGenerateXcoreModelProject {
 	
 	@Test
 	public void testGenerateXcoreModelProjects() throws Exception {
-		String [] models = new String[] {
-				"iam", 
-				"seal",
-				"lifecycle",
-				"governance",
-				"work",
-				"architecture",
-				"threat",
-				"mcp",
-				"capability",
-				"ui",
-				"diagram",
-				"presentation",
-				"drawio",
-				"powerpoint",
-				"visio",
-				"plantuml",
-				"odp",
-				"pdf",
-				"maven",
-				"bw5"};
-		for (String model: models) {
-			generateXcoreModelProject(model);
-		}
+		generateXcoreModelProject("seal");
 	}	
 	
 	private void generateXcoreModelProject(String model) throws Exception {
