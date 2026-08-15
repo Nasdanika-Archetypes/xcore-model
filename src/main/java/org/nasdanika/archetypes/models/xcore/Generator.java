@@ -454,7 +454,7 @@ public class Generator {
 			case 7 -> replace(
 					line, 
 					"org.nasdanika.models.markdown",
-					"%s.%s".formatted(getGroupId(), getModelJavaName()));
+					getGroupId());
 			case 9, 10, 11, 12 -> replace(
 					line, 
 					"org.nasdanika.models.markdown",
