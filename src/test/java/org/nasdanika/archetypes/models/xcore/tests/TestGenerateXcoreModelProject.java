@@ -12,12 +12,12 @@ public class TestGenerateXcoreModelProject {
 		Generator generator = new Generator() {
 			@Override
 			public String getGroupId() {
-				return "org.nasdanika.models.architecture.c4";
+				return "org.nasdanika.models.decision.binding";
 			}
 		};
-		generator.setModelName("c4");
+		generator.setModelName("DecisionBinding");
 		generator.setVersion("2026.8.0");
-		generator.generate(new File("target/generated-model/c4"));
+		generator.generate(new File("target/generated-model/decision-binding"));
 	}
 	
 	@Test
