@@ -16,7 +16,7 @@ import org.nasdanika.common.Util;
 
 public class Generator {
 	
-	private String cliVersion = "2026.2.0";
+	private String cliVersion = "2026.6.0";
 	
 	/**
 	 * Short name of the model, e.g. "markdown".
@@ -122,7 +122,7 @@ public class Generator {
 			return switch (line.getLineNumber()) {		
 				case 27 -> line.mapLine(l -> l.replace("Set up JDK 21", "Set up JDK %s".formatted(getJavaVersion())));
 				case 30 -> line.mapLine(l -> l.replace("java-version: '21'", "java-version: '%s'".formatted(getJavaVersion())));
-				case 33 -> line.mapLine(l -> l.replace("2026.2.0", getCliVersion()));
+				case 33 -> line.mapLine(l -> l.replace("2026.6.0", getCliVersion()));
 				case 44 -> line.mapLine(l -> l.replace(
 						"./nsd xcore ../model/src/main/resources/org/nasdanika/models/markdown/markdown.xcore doc --diagram=markdown.drawio --doc-stubs --doc-dir=../model/doc save ../model/markdown.xmi", 
 						Util.interpolate(
@@ -384,7 +384,7 @@ public class Generator {
 							line, 
 							"@Ecore(nsURI=\"https://markdown.models.nasdanika.org\", nsPrefix=\"org.nasdanika.models.markdown\")",
 							"@Ecore(nsURI=\"%s\", nsPrefix=\"%s\")".formatted(getNsURI(), getGroupId()));
-					case 11 -> replace(
+					case 3, 11 -> replace(
 							line, 
 							"org.nasdanika.models.markdown",
 							getGroupId());
