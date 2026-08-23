@@ -12,28 +12,132 @@
     <packaging>jar</packaging>
     <name>Ecore Markdown Model</name>
 
+    <properties>
+        <xtext.version>2.36.0</xtext.version>
+        <!-- Pulls in xtext.ecore, codegen.ecore.xtext, codegen.ecore and xcore.lib transitively. -->
+        <emf.xcore.version>1.37.0</emf.xcore.version>
+    </properties>
+
     <build>
         <plugins>
+            <!--
+                Generates Java sources from src/main/resources/**/*.xcore into src-gen.
+
+                This removes the dependency on the Eclipse Xcore builder
+                (org.eclipse.xtext.ui.shared.xtextBuilder) and the Xtext project nature,
+                so the model can be built from the command line, in CI, and in editors
+                that are not Eclipse - VS Code, IntelliJ IDEA, and so on.
+
+                How to run
+                ==========
+
+                Full build, from the repository root:
+
+                    mvn clean install
+
+                Full build of this module only, from the repository root
+                (-am also builds the modules it depends on):
+
+                    mvn -pl model -am clean install
+
+                Generate sources only - no compilation, no tests - from this directory:
+
+                    mvn generate-sources
+
+                ... or the same thing from the repository root:
+
+                    mvn -pl model generate-sources
+
+                Just this plugin, skipping the rest of the generate-sources phase:
+
+                    mvn org.eclipse.xtext:xtext-maven-plugin:generate
+
+                Notes
+                =====
+
+                * src-gen is registered as a compile source root by
+                  build-helper-maven-plugin below, so "mvn compile" regenerates and
+                  compiles in one go.
+
+                * Nothing watches .xcore files outside Eclipse. After editing the model
+                  in VS Code run "mvn generate-sources" and then reload the Java
+                  projects - "Java: Clean Java Language Server Workspace" from the
+                  command palette if the new or renamed types are not picked up.
+
+                * If the project is also open in Eclipse with the Xtext nature enabled,
+                  the Eclipse builder and this plugin both write into src-gen. Remove
+                  org.eclipse.xtext.ui.shared.xtextNature and the xtextBuilder build
+                  command from .project to leave generation to Maven alone.
+
+                * All three <language> entries are required, and the order matters:
+                  the Xcore model references Ecore and GenModel resources, so support
+                  for those languages has to be registered before the Xcore setup runs.
+
+                * The output directory is NOT configured here. Xcore hands generation
+                  over to the EMF GenModel code generator, which writes to the
+                  modelDirectory declared in the .xcore file itself:
+
+                      @GenModel(modelDirectory="/model/src-gen", ...)
+
+                  The plugin's <outputConfiguration> has no effect on it. Without an
+                  explicit modelDirectory the build still reports SUCCESS and silently
+                  produces nothing, so if src-gen comes up empty, check that annotation
+                  first. The leading path segment is this Maven module's directory
+                  name, so it has to stay in step with the directory if it is renamed.
+
+                * That modelDirectory is also what the Eclipse Xcore builder obeys, and
+                  Eclipse resolves the leading segment against the WORKSPACE PROJECT
+                  name rather than the directory name. This project is named
+                  org.nasdanika.models.drawio in .project, so with "/model/src-gen"
+                  set, generation works under Maven and not under Eclipse. That is the
+                  intent - Maven is the generator of record. To go back to generating
+                  in Eclipse, drop the modelDirectory annotation, which turns this
+                  plugin back into a no-op.
+
+                * The generator resolves imports - presentation, diagram, nxcore - from
+                  the project's compile classpath, so the models this one extends have
+                  to be resolvable before sources can be generated.
+            -->
+            <!--
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.5.0</version>
+                <groupId>org.eclipse.xtext</groupId>
+                <artifactId>xtext-maven-plugin</artifactId>
+                <version>${xtext.version}</version>
                 <executions>
                     <execution>
-                        <phase>package</phase>
+                        <id>generate-xcore</id>
+                        <phase>generate-sources</phase>
                         <goals>
-                            <goal>jar</goal>
+                            <goal>generate</goal>
                         </goals>
-                        <configuration>
-                            <classifier>model</classifier>
-                            <includes>
-                                <include>model/**</include>
-                            </includes>
-                            <classesDirectory>${project.basedir}</classesDirectory>
-                        </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <languages>
+                        <language>
+                            <setup>org.eclipse.xtext.ecore.EcoreSupport</setup>
+                        </language>
+                        <language>
+                            <setup>org.eclipse.emf.codegen.ecore.xtext.GenModelSupport</setup>
+                        </language>
+                        <language>
+                            <setup>org.eclipse.emf.ecore.xcore.XcoreStandaloneSetup</setup>
+                        </language>
+                    </languages>
+                    <sourceRoots>
+                        <root>${project.basedir}/src/main/resources</root>
+                    </sourceRoots>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.eclipse.emf</groupId>
+                        <artifactId>org.eclipse.emf.ecore.xcore</artifactId>
+                        <version>${emf.xcore.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
+            -->
+        
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>

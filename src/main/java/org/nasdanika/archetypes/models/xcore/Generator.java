@@ -384,7 +384,7 @@ public class Generator {
 							line, 
 							"@Ecore(nsURI=\"https://markdown.models.nasdanika.org\", nsPrefix=\"org.nasdanika.models.markdown\")",
 							"@Ecore(nsURI=\"%s\", nsPrefix=\"%s\")".formatted(getNsURI(), getGroupId()));
-					case 10 -> replace(
+					case 11 -> replace(
 							line, 
 							"org.nasdanika.models.markdown",
 							getGroupId());

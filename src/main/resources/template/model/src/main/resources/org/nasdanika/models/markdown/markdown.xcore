@@ -1,7 +1,8 @@
 @Ecore(nsURI="https://markdown.models.nasdanika.org", nsPrefix="org.nasdanika.models.markdown")
 @GenModel(
+	modelDirectory="/model/src-gen",
     featureDelegation="Dynamic",
-    complianceLevel="21.0",
+    complianceLevel="21",
     suppressGenModelAnnotations="false",
     copyrightFields="false",
     operationReflection="true",
