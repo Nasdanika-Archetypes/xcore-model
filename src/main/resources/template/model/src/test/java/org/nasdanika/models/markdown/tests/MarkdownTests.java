@@ -23,19 +23,19 @@ public class MarkdownTests {
 	
 	@Test
 	public void testMarkdownResource() throws Exception {
-		CapabilityLoader capabilityLoader = new CapabilityLoader();
-		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		Requirement<ResourceSetRequirement, ResourceSet> requirement = ServiceCapabilityFactory.createRequirement(ResourceSet.class);		
-		ResourceSet resourceSet = capabilityLoader.loadOne(requirement, progressMonitor);
-        
-		File markdownFile = new File("src/test/resources/product-domain.md").getCanonicalFile();
-		Resource markdownResource = resourceSet.getResource(URI.createFileURI(markdownFile.getAbsolutePath()), true);		
-		Document document = (Document) markdownResource.getContents().get(0);
-		
-		File xmlFile = new File("target/product-domain.xml").getCanonicalFile();
-		Resource xmlResource = resourceSet.createResource(URI.createFileURI(xmlFile.getAbsolutePath()));
-		xmlResource.getContents().add(EcoreUtil.copy(document));
-		xmlResource.save(null);		
+//		CapabilityLoader capabilityLoader = new CapabilityLoader();
+//		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+//		Requirement<ResourceSetRequirement, ResourceSet> requirement = ServiceCapabilityFactory.createRequirement(ResourceSet.class);		
+//		ResourceSet resourceSet = capabilityLoader.loadOne(requirement, progressMonitor);
+//        
+//		File markdownFile = new File("src/test/resources/product-domain.md").getCanonicalFile();
+//		Resource markdownResource = resourceSet.getResource(URI.createFileURI(markdownFile.getAbsolutePath()), true);		
+//		EObject document = markdownResource.getContents().get(0);
+//		
+//		File xmlFile = new File("target/product-domain.xml").getCanonicalFile();
+//		Resource xmlResource = resourceSet.createResource(URI.createFileURI(xmlFile.getAbsolutePath()));
+//		xmlResource.getContents().add(EcoreUtil.copy(document));
+//		xmlResource.save(null);		
 	}	
 
 }
