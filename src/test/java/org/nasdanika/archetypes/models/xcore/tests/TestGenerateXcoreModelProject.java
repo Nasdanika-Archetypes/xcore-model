@@ -38,7 +38,7 @@ public class TestGenerateXcoreModelProject {
 	
 	@Test
 	public void testGenerateXcoreModelProjects() throws Exception {
-		generateXcoreModelProject("seal");
+		generateXcoreModelProject("sprotty");
 	}	
 	
 	private void generateXcoreModelProject(String model) throws Exception {

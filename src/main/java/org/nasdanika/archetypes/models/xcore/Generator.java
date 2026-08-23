@@ -130,6 +130,7 @@ public class Generator {
 								Map.of(
 										"modelName", getModelName(),
 										"groupPath", getGroupId().replace('.', '/'))::get)));
+				case 48 -> line.mapLine(l -> l.replace("https://markdown.nasdanika.org", getNsURI()));
 				case 49 -> line.mapLine(l -> l.replace("markdown.drawio", getModelName() + ".drawio"));
 				case 50 -> line.mapLine(l -> l.replace("org/nasdanika/models/markdown/markdown", getGroupId().replace('.', '/') + "/" + getModelName()));
 				default -> line;

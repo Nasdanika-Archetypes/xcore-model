@@ -45,7 +45,7 @@ jobs:
       - name: Generate Ecore site
         working-directory: nsd-cli
         run: |
-          ./nsd model ../model/root-action.yml labels site -r=-1 -F ../model/page-template.yml ../docs
+          ./nsd model ../model/root-action.yml labels site -r=-1 -F ../model/page-template.yml -m https://markdown.nasdanika.org ../docs
           cp markdown.drawio ../docs
           cp ../model/src/main/resources/org/nasdanika/models/markdown/markdown.xcore ../docs
           cp -R ../images ../docs
