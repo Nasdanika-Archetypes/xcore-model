@@ -13,9 +13,9 @@
     <name>Ecore Markdown Model</name>
 
     <properties>
-        <xtext.version>2.36.0</xtext.version>
+        <xtext.version>2.42.0</xtext.version>
         <!-- Pulls in xtext.ecore, codegen.ecore.xtext, codegen.ecore and xcore.lib transitively. -->
-        <emf.xcore.version>1.37.0</emf.xcore.version>
+        <emf.xcore.version>1.36.0</emf.xcore.version>
     </properties>
 
     <build>
@@ -98,7 +98,6 @@
                   the project's compile classpath, so the models this one extends have
                   to be resolvable before sources can be generated.
             -->
-            <!--
             <plugin>
                 <groupId>org.eclipse.xtext</groupId>
                 <artifactId>xtext-maven-plugin</artifactId>
@@ -136,7 +135,6 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            -->
         
             <plugin>
                 <groupId>org.jacoco</groupId>
