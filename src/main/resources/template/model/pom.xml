@@ -13,9 +13,10 @@
     <name>Ecore Markdown Model</name>
 
     <properties>
-        <xtext.version>2.42.0</xtext.version>
+        <xtext.version>2.43.0</xtext.version>
         <!-- Pulls in xtext.ecore, codegen.ecore.xtext, codegen.ecore and xcore.lib transitively. -->
         <emf.xcore.version>1.36.0</emf.xcore.version>
+       <emf.xcore.lib.version>1.7.1</emf.xcore.lib.version>        
     </properties>
 
     <build>
@@ -187,6 +188,16 @@
             <groupId>org.eclipse.emf</groupId>
             <artifactId>org.eclipse.emf.ecore</artifactId>
             <version>2.42.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.xtext</groupId>
+            <artifactId>org.eclipse.xtext.xbase.lib</artifactId>
+            <version>${xtext.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.emf</groupId>
+            <artifactId>org.eclipse.emf.ecore.xcore.lib</artifactId>
+            <version>${emf.xcore.lib.version}</version>
         </dependency>
     </dependencies>
 </project>
